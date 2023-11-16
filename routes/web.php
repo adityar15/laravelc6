@@ -14,10 +14,8 @@ use App\Http\Controllers\TestController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::inertia("/", "Register");
+Route::post("/register", [TestController::class, 'register']);
 
 Route::get('/about', [TestController::class, 'index']);
 

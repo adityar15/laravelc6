@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 class TestController extends Controller
@@ -29,5 +31,30 @@ class TestController extends Controller
         return "You subscribed to our newsletter";
     }
 
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'min:3'],
+            'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
+            'password' => ['required', 'min:6', 'max:16']
+        ]);
+
+        // if(!str_contains($request->password, "Aditya"))
+        // {
+        //     throw ValidationException::withMessage([
+        //         'password' => 'Please use word Aditya in your password'
+        //     ]);
+        // }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+
+        // web response
+        return redirect()->back();
+
+    }
    
 }
