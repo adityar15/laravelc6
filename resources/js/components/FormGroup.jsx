@@ -12,7 +12,14 @@ export default function FormGroup({
             <label htmlFor="">
                 {label}
             </label>
-            <input {...other} type={type} name={name} placeholder={placeholder} className="p-2 border border-orange-500 rounded" />
+
+            {
+                type == 'textarea' ? (
+                    <textarea {...other} cols="30" rows="10" placeholder={placeholder} className="p-2 border border-orange-500 rounded"></textarea>
+                ) :  <input {...other} type={type} placeholder={placeholder} className="p-2 border border-orange-500 rounded" />
+            }
+
+           
             <span className='text-red-500'>{errorMessage}</span>
         </div>
     )

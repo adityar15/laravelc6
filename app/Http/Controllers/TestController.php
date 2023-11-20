@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class TestController extends Controller
@@ -52,8 +54,33 @@ class TestController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
+        // send an email to the user so that they verify
+
         // web response
         return redirect()->back();
+
+    }
+
+    public function login(Request $request)
+    {  
+        $request->validate([
+            'email' => ['required', 'email:rfc,dns', 'exists:users,email'],
+            'password' => ['required', 'min:6', 'max:16']
+        ]);
+
+
+        // $user = User::where('email', $request->email)->first();
+        // Hash::check($request->password, $user->password);
+
+       if( Auth::attempt(['email' => $request->email, 'password' => $request->password]))
+        {
+            // go to dashboard
+            // auth()->user();
+
+            return redirect('/dashboard');
+        }
+
+        throw ValidationException::withMessages(['email' => "Invalid Credentials"]);
 
     }
    
