@@ -10,4 +10,16 @@ class Blog extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function scopeGetArticles()
+    {
+        $this->when(auth()->user(), function($query) {
+            return $query->where('user_id', auth()->user()->id);
+        });
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

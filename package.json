@@ -7,6 +7,7 @@
         "concurrent-serve": "npx concurrently \"npm run dev\" \"php artisan serve\""
     },
     "devDependencies": {
+        "@tailwindcss/typography": "^0.5.10",
         "@vitejs/plugin-react": "^4.1.1",
         "autoprefixer": "^10.4.16",
         "axios": "^1.1.2",
@@ -17,6 +18,9 @@
     },
     "dependencies": {
         "@inertiajs/react": "^1.0.14",
+        "dompurify": "^3.0.6",
+        "isomorphic-dompurify": "^1.9.0",
+        "marked": "^10.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     }

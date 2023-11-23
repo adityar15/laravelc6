@@ -36,8 +36,14 @@ Route::get('/about', [TestController::class, 'index']);
 Route::post("/newsletter", [TestController::class, 'subscribe']);
 
 
+
 Route::middleware('checksuser')->group(function(){
     Route::get("/dashboard", [DashboardController::class, 'index']);
     Route::inertia('/create-blog', 'CreateBlog');
     Route::post('/create-blog', [DashboardController::class, 'createBlog']);
+
+    Route::get('/dashboard/blog/{slug}', [DashboardController::class, 'showBlog']);
+
+    Route::get("/blog/edit/{id}", [DashboardController::class, 'editBlog']);
+    Route::get("/blog/delete/{id}", [DashboardController::class, 'deleteBlog']);
 });

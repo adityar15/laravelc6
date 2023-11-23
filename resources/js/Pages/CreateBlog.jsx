@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import GuestLayout from '../components/layouts/GuestLayout'
 import { useForm } from '@inertiajs/react'
 import FormGroup from '../components/FormGroup'
 
-export default function CreateBlog() {
+
+export default function CreateBlog({blog={}}) {
  
     const { data, setData, post, errors, processing } = useForm({
         title: "",
         article: "",
-        slug: ""
+        slug: "",
+        id: null
     })
 
     function handleSubmit(e)
@@ -21,6 +23,19 @@ export default function CreateBlog() {
             }
         })
     }
+
+    useEffect(() => {
+        if(!blog?.id)
+        return 
+        
+        setData({
+            title: blog.title,
+            slug: blog.slug,
+            article: blog.article,
+            id: blog.id
+        })
+
+    }, [blog])
 
     return (
         <>
@@ -41,7 +56,9 @@ export default function CreateBlog() {
                 errorMessage={errors.article}
                 />
 
-                <button disabled={processing} className='bg-orange-500 text-white px-4 py-2'>Create</button>
+                <button disabled={processing} className='bg-orange-500 text-white px-4 py-2'>
+                    {blog?.id ? "Update" : "Create"}
+                </button>
             </form>
         </>
     )
