@@ -36,7 +36,7 @@ class DashboardController extends Controller
         $request->validate([
             'title' => ['required', 'min:3'],
             'article' => ['required', 'max:7500'],
-            'slug' => ['required', Rule::unique('blogs')->ignore($request->id)]
+            'slug' => ['required', Rule::exists('blogs')->ignore($request->id)]
         ]);
 
 
@@ -53,7 +53,7 @@ class DashboardController extends Controller
 
     public function showBlog($slug)
     {
-        $blog = Blog::where('slug', $slug)->with('author')->first();
+        $blog = Blog::where('id', $slug)->with('author')->first();
         return Inertia::render("Article", [
             'blog' => $blog
         ]);
