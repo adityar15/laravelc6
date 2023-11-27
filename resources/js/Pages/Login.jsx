@@ -23,7 +23,7 @@ const Login = () => {
         <>
             <form onSubmit={handleSubmit}>
                 <FormGroup label="Email" placeholder="Enter your email" type="email" value={data.email} onChange={
-                    (e) => setData("email", e.target.value)
+                    (e) => setData("emeil", e.target.value)
                 } 
                 errorMessage={errors.email}
                 />

@@ -72,7 +72,7 @@ class TestController extends Controller
         // $user = User::where('email', $request->email)->first();
         // Hash::check($request->password, $user->password);
 
-       if( Auth::attempt(['email' => $request->email, 'password' => $request->password]))
+       if( Auth::attempt(['email' => $request->email, 'pwd' => $request->password]))
         {
             // go to dashboard
             // auth()->user();

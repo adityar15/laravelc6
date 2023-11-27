@@ -39,6 +39,7 @@ Route::post("/newsletter", [TestController::class, 'subscribe']);
 
 Route::middleware('checksuser')->group(function(){
     Route::get("/dashboard", [DashboardController::class, 'index']);
+    Route::get('/dashboards', [DashboardController::class, 'createBlog']);
     Route::inertia('/create-blog', 'CreateBlog');
     Route::post('/create-blog', [DashboardController::class, 'createBlog']);
 

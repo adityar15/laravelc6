@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/react'
 export default function BlogCard({ blog }) {
 
   const {user} = usePage().props
+  console.log(blog)
 
   return (
     <div className="border border-gray-200 rounded p-5">
