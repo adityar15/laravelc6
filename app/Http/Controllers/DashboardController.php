@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -21,39 +22,54 @@ class DashboardController extends Controller
         //intermediate pagination
         // eager loading
         // n + 1 problem
-        $blogs = Blog::with('author')->when(auth()->user(), function($query) {
+        $blogs = Blog::with('author')->when(auth()->user(), function ($query) {
             return $query->where('user_id', auth()->user()->id);
         })->paginate(10);
 
         // select * from blogs
-        return Inertia::render(auth()->user() ? 'Dashboard': 'Blog', [
+        return Inertia::render(auth()->user() ? 'Dashboard' : 'Blog', [
             'blogs' => $blogs
         ]);
     }
+
+
 
     public function createBlog(Request $request)
     {
         $request->validate([
             'title' => ['required', 'min:3'],
             'article' => ['required', 'max:7500'],
-            'slug' => ['required', Rule::exists('blogs')->ignore($request->id)]
+            'slug' => ['required', Rule::unique('blogs')->ignore($request->id)]
         ]);
 
 
-        $blog = Blog::updateOrCreate([
-            'slug' => $request->slug,
-        ],[
-            'title' => $request->title,
-            'article' => $request->article,
-            'user_id' => auth()->user()->id
-        ]);
+        if ($request->id) {
+            Blog::where('id', $request->id)->update(
+                [
+                    'title' => $request->title,
+                    'article' => $request->article,
+                    'slug' => $request->slug
+                ]
+            );
+        }
+
+        else {
+            Blog::create([
+                'title' => $request->title,
+                'article' => $request->article,
+                'slug' => $request->slug,
+                'user_id' => auth()->user()->id
+            ]);
+        }
 
         return redirect()->back();
     }
 
     public function showBlog($slug)
     {
-        $blog = Blog::where('id', $slug)->with('author')->first();
+
+        $blog = Blog::where('slug', $slug)->with('author')->first();
+
         return Inertia::render("Article", [
             'blog' => $blog
         ]);
@@ -71,13 +87,11 @@ class DashboardController extends Controller
     public function deleteBlog($id)
     {
         $blog = Blog::findOrFail($id);
-       
-        if($blog->user_id == auth()->user()->id)
-        {
+
+        if ($blog->user_id == auth()->user()->id) {
             $blog->delete();
         }
 
         return redirect()->back();
-
     }
 }

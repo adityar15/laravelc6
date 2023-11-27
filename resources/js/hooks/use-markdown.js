@@ -17,10 +17,7 @@ export default function useMarkdown(dirtyText)
 
         const parsedHTML = marked.parse(dirtyText)
        
-        const cleanHTMLAfterParsed = DOMPurify.sanitize(parsedHTML)
-        
-
-        setCleanText(cleanHTMLAfterParsed)
+        setCleanText( DOMPurify.sanitize(parsedHTML))
 
     }, [dirtyText])
 
