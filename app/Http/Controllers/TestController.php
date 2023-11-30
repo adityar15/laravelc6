@@ -19,6 +19,7 @@ class TestController extends Controller
         // dd($users);
         // select * from users
         // select * from users skip 40 limit 10
+        Auth::logout();
         return Inertia::render("About", ['users' => $users]);
 
     }
